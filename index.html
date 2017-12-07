@@ -1,1 +1,45 @@
-hello world
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AWS Analysis</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" integrity="sha384-3ziFidFTgxJXHMDttyPJKDuTlmxJlwbSkojudK/CkRqKDOmeSbN6KLrGdrBQnT2n" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="content">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="text-center heading">
+          <h1>Welcome to AWS Tweet Enhancer!</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2 side-left">
+
+      </div>
+      <div class="col-lg-8 center">
+        <form id="form">
+          Tweet Text:<br>
+          <input type="textarea" name="tweet-text"><br>
+          Clout Score of Tweeter:<br>
+          <input type="text" name="clout"><br>
+          Tweet Time:<br>
+          <input id="tweet-time" name="time" class="time ui-timepicker-input" autocomplete="off" type="text">
+          <input type="submit" class="btn btn-primary" value="submit">
+        </form>
+      </div>
+      <div class="col-lg-2 side-right">
+
+      </div>
+    </div>
+  </div>
+</body>
+<link href="jquery.timepicker.min.css" rel="stylesheet">
+<script src="jquery.timepicker.js" type="text/javascript"></script>
+<script>
+  $('#scrollDefaultExample').timepicker({ 'scrollDefault': 'now' });
+</script>
+</html>
