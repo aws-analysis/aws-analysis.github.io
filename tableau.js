@@ -1,5 +1,5 @@
 
-var viz, workbook, activeSheet
+var viz, workbook, activeSheet;
 
 function initViz() {
 
@@ -12,7 +12,6 @@ function initViz() {
     hideTabs: true,
     hideToolbar: true,
     onFirstInteractive: function () {
-      listenToMarksSelection();
       workbook = viz.getWorkbook();
       activeSheet = workbook.getActiveSheet();
     }
@@ -21,6 +20,6 @@ function initViz() {
   viz = new tableau.Viz(containerDiv, url, options);
 }
 
-function clearSelection() {
-  workbook.getActiveSheet().clearSelectedMarksAsync();
+function switchTab(sheetName) {
+  workbook.activateSheetAsync(sheetName);
 }
