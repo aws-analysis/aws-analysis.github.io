@@ -43,41 +43,52 @@
       </div>
     </div>
     <div class="row" style="margin-top:4em">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Contact</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Jon Kofford</th>
-            <td>Azure ML / Data / Leader</td>
-            <td>jkofford AT gmail DOT com</td>
-          </tr>
-          <tr>
-            <td>Brian Marchant</th>
-            <td>Web / Tableau Interface</td>
-            <td>brianmarchant AT gmail DOT com</td>
-          </tr>
-          <tr>
-            <td>Alex Pratt</th>
-            <td>Azure ML / Tableau Dashboard</td>
-            <td>alexwpratt AT gmail DOT com</td>
-          </tr>
-          <tr>
-            <td>Shane Whitlock</th>
-            <td>Web / Azure Interface </td>
-            <td>shaneawhitlock AT gmail DOT com</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="col-lg-2">
+
+      </div>
+      <div class="col-lg-8">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jon Kofford</th>
+              <td>Azure ML / Data / Leader</td>
+              <td>jkofford AT gmail DOT com</td>
+            </tr>
+            <tr>
+              <td>Brian Marchant</th>
+              <td>Web / Tableau Interface</td>
+              <td>brianmarchant AT gmail DOT com</td>
+            </tr>
+            <tr>
+              <td>Alex Pratt</th>
+              <td>Azure ML / Tableau Dashboard</td>
+              <td>alexwpratt AT gmail DOT com</td>
+            </tr>
+            <tr>
+              <td>Shane Whitlock</th>
+              <td>Web / Azure Interface </td>
+              <td>shaneawhitlock AT gmail DOT com</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-2">
+
+      </div>
     </div>
   </div>
   <div class="loader"></div>
 </body>
 <script>
+$(window).on('load', function(){
+   $('.loader').fadeOut();
+ });
 </script>
 </html>
