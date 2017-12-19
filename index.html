@@ -47,18 +47,40 @@
 
       </div>
       <div class="col-lg-8 center">
-        <form id="form" class="text-center">
+        <form id="form" class="">
           Tweet Text:<br>
           <input type="textarea" name="tweet-text"><br>
           Klout Score of Tweeter:<br>
-          <input type="text" name="clout"><br>
+          <input type="text" name="klout"><br>
+          Tweet Day:<br>
+          <input list="days" name="day"><br>
+            <datalist id="days">
+              <option value="Monday">
+              <option value="Tuesday">
+              <option value="Wednesday">
+              <option value="Thursday">
+              <option value="Friday">
+              <option value="Saturday">
+              <option value="Sunday">
+            </datalist>
           Tweet Time:<br>
           <input id="tweet-time" name="time" class="time ui-timepicker-input" autocomplete="off" type="text"><br><br>
+          Country:<br>
+          <input type="textarea" name="country"><br>
+          State:<br>
+          <input type="textarea" name="state"><br>
+          City:<br>
+          <input type="textarea" name="city"><br>
+          Gender:<br>
+          <input type="radio" name="gender" value="Male"> Male<br>
+          <input type="radio" name="gender" value="Female"> Female<br>
+          <input type="radio" name="gender" value="Unisex"> Unisex<br>
+          <input type="radio" name="gender" value="Unknown"> Unknown<br>
           <input type="submit" class="btn btn-primary" value="submit">
         </form>
       </div>
       <div class="col-lg-2 side-right">
-
+        <h2 id="results">Predicted Retweets: <span id="result-num"></span></h2>
       </div>
     </div>
   </div>
@@ -67,6 +89,117 @@
 <link href="jquery.timepicker.min.css" rel="stylesheet">
 <script src="jquery.timepicker.js" type="text/javascript"></script>
 <script>
+  $('#form').on('submit', function(e) {
+    e.preventDefault();
+    var key = "nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==";
+    var HourMs = "";
+    var DayMs = "";
+    var IsReshare = "false";
+    var RetweetCount = "0";
+    var Klout = "";
+    var Country = "";
+    var State = "";
+    var City = "";
+    var Gender = "";
+    var text = "";
+    var URL = "false";
+    var values = $(this).serializeArray();
+    for (var index = 0; index < values.length; index++){
+      switch(values[index].name){
+        case "tweet-text":
+          text = values[index].value;
+          if(text.toString().includes('.com') || text.toString().includes('.org') || text.toString().includes('www.') || text.toString().includes('http'))
+            URL = "true";
+          break;
+        case "time":
+          time = values[index].value;
+          hours = time.toString().trim(":")[0];
+          pm = time.toString().includes("pm");
+          if(pm)
+            hours = parseInt(hours) + 12;
+          HourMs = hours.toString();
+          break;
+        case "klout":
+          Klout = values[index].value;
+          break;
+        case "country":
+          Country = values[index].value;
+          break;
+        case "day":
+          DayMs = values[index].value;
+          break;
+        case "gender":
+          Gender = values[index].value;
+          break;
+        case "state":
+          State = values[index].value;
+          break;
+        case "city":
+          City = values[index].value;
+          break;
+      }
+    }
+    var input1 = [{
+      'HourMs' : HourMs,
+      'DayMs' : DayMs,
+      'IsReshare' : IsReshare,
+      'RetweetCount' : RetweetCount,
+      'Klout' : Klout,
+      'Country' : Country,
+      'State' : State,
+      'City' : City,
+      'Gender' : Gender,
+      'text' : text,
+      'URL' : URL
+    }]
+    //
+    // var object = {
+    //   "inputs": input1,
+    //   "GlobalParameters":{}
+    // }
+    // var jsonString = JSON.stringify(input1);
+    // var clean = jsonString.replace(/"/g,"'");
+    // var requestBody = "{\"Inputs\":{\"Input1\":"+JSON.stringify(input1)+"\,\'GlobalParameters\':{}}}";
+
+    var data = {
+        "Inputs": {
+            "input1":
+            [
+                {
+                  'HourMs' : HourMs,
+                  'DayMs' : DayMs,
+                  'IsReshare' : IsReshare,
+                  'RetweetCount' : RetweetCount,
+                  'Klout' : Klout,
+                  'Country' : Country,
+                  'State' : State,
+                  'City' : City,
+                  'Gender' : Gender,
+                  'text' : text,
+                  'URL' : URL
+                }
+            ],
+        },
+        "GlobalParameters": {}
+    }
+
+    var body = JSON.stringify(data);
+
+    $.ajax({
+          type: "POST",
+          url: "https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
+          data: body,
+          headers: {
+              "Authorization": "Bearer nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==",
+              "Content-Type": "application/json;charset=utf-8"
+          }
+      }).done(function (data) {
+          $('#results').show();
+          $('#result-num').html(data['Results']["output1"][0]['Scored Labels']);
+      });
+    });
+
+  $('#results').hide();
   $('#tweet-time').timepicker({ 'scrollDefault': 'now' });
   $(window).on('load', function(){
      $('.loader').fadeOut();
