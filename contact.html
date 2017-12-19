@@ -19,7 +19,7 @@
     <a class="navbar-brand" href="index.html">Home</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
@@ -28,7 +28,7 @@
         <li class="nav-item">
           <a class="nav-link" href="https://github.com/aws-analysis/aws-analysis.github.io">View Code on Github</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="contact.html">Contact</a>
         </li>
       </ul>
@@ -43,33 +43,41 @@
       </div>
     </div>
     <div class="row" style="margin-top:4em">
-      <div class="col-lg-2 side-left">
-
-      </div>
-      <div class="col-lg-8 center">
-        <form id="form" class="text-center">
-          Tweet Text:<br>
-          <input type="textarea" name="tweet-text"><br>
-          Klout Score of Tweeter:<br>
-          <input type="text" name="clout"><br>
-          Tweet Time:<br>
-          <input id="tweet-time" name="time" class="time ui-timepicker-input" autocomplete="off" type="text"><br><br>
-          <input type="submit" class="btn btn-primary" value="submit">
-        </form>
-      </div>
-      <div class="col-lg-2 side-right">
-
-      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jon Kofford</th>
+            <td>Azure ML / Data / Leader</td>
+            <td>jkofford AT gmail DOT com</td>
+          </tr>
+          <tr>
+            <td>Brian Marchant</th>
+            <td>Web / Tableau Interface</td>
+            <td>brianmarchant AT gmail DOT com</td>
+          </tr>
+          <tr>
+            <td>Alex Pratt</th>
+            <td>Azure ML / Tableau Dashboard</td>
+            <td>alexwpratt AT gmail DOT com</td>
+          </tr>
+          <tr>
+            <td>Shane Whitlock</th>
+            <td>Web / Azure Interface </td>
+            <td>shaneawhitlock AT gmail DOT com</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="loader"></div>
 </body>
-<link href="jquery.timepicker.min.css" rel="stylesheet">
-<script src="jquery.timepicker.js" type="text/javascript"></script>
 <script>
-  $('#tweet-time').timepicker({ 'scrollDefault': 'now' });
-  $(window).on('load', function(){
-     $('.loader').fadeOut();
-   });
 </script>
 </html>
