@@ -80,7 +80,9 @@
         </form>
       </div>
       <div class="col-lg-4">
-        <span style="font-size:24px; font-weight:bolder;"id="results">Predicted Retweets: <span id="result-num"></span></span>
+        <!-- Predicted Retweets: <span id="result-num"></span> -->
+        <h2 class="results" id="thisTweet"></h2>
+        <span class="results" style="font-size:24px; font-weight:bolder;"id="results"></span>
         <div id="loader2"></div>
         <div id="instructions">
           <p class="lead">
@@ -101,10 +103,13 @@
 <link href="jquery.timepicker.min.css" rel="stylesheet">
 <script src="jquery.timepicker.js" type="text/javascript"></script>
 <script>
+  var counter = 0;
   $('#form').on('submit', function(e) {
     e.preventDefault();
+    $('#results').html("")
+    counter = 0;
     $('#instructions').hide();
-    $('#results').hide();
+    $('.results').hide();
     $('#loader2').show();
     var key = "nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==";
     var HourMs = "";
@@ -167,43 +172,66 @@
       'text' : text,
       'URL' : URL
     }]
-    //
-    // var object = {
-    //   "inputs": input1,
-    //   "GlobalParameters":{}
-    // }
-    // var jsonString = JSON.stringify(input1);
-    // var clean = jsonString.replace(/"/g,"'");
-    // var requestBody = "{\"Inputs\":{\"Input1\":"+JSON.stringify(input1)+"\,\'GlobalParameters\':{}}}";
 
     var data = {
-        "Inputs": {
-            "input1":
-            [
-                {
-                  'HourMs' : HourMs,
-                  'DayMs' : DayMs,
-                  'IsReshare' : IsReshare,
-                  'RetweetCount' : RetweetCount,
-                  'Klout' : Klout,
-                  'Country' : Country,
-                  'State' : State,
-                  'City' : City,
-                  'Gender' : Gender,
-                  'text' : text,
-                  'URL' : URL
-                }
-            ],
-        },
-        "GlobalParameters": {}
+      "Inputs": {
+        "input1":
+        [
+          {
+            'HourMs' : HourMs,
+            'DayMs' : DayMs,
+            'IsReshare' : IsReshare,
+            'RetweetCount' : RetweetCount,
+            'Klout' : Klout,
+            'Country' : Country,
+            'State' : State,
+            'City' : City,
+            'Gender' : Gender,
+            'text' : text,
+            'URL' : URL
+          }
+        ],
+      },
+      "GlobalParameters": {}
     }
 
     var body = JSON.stringify(data);
-    SendData(body);
+    SendData(body, "Predicted Retweets: ");
+
+    var times = ['3', '5', '8', '11'];
+
+    for (var index = 0; index < times.length; index++){
+      if(times[index] == HourMs)
+        continue;
+      var data = {
+        "Inputs": {
+          "input1":
+          [
+            {
+              'HourMs' : times[index],
+              'DayMs' : DayMs,
+              'IsReshare' : IsReshare,
+              'RetweetCount' : RetweetCount,
+              'Klout' : Klout,
+              'Country' : Country,
+              'State' : State,
+              'City' : City,
+              'Gender' : Gender,
+              'text' : text,
+              'URL' : URL
+            }
+          ],
+        },
+        "GlobalParameters": {}
+      }
+
+      var body = JSON.stringify(data);
+      SendData(body);
+    }
 
     });
 
-    function SendData(body) {
+    function SendData(body, name) {
       $.ajax({
             type: "POST",
             url: "https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
@@ -218,16 +246,43 @@
                 "Content-Type": "application/json;charset=utf-8"
             }
         }).done(function (data) {
-            var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
-            if(parseInt(result) < 0)
-              result = 0;
-            $('#results').show();
-            $('#result-num').html(result);
-            $('#loader2').hide();
+            if(name){
+              UpdateThisTweet(data);
+              return true;
+            } else {
+              body = JSON.parse(body);
+              var hour = body['Inputs']['input1'][0]['HourMs'];
+              UpdateResultLabels(hour + " am: ", hour)
+              UpdateResults(data, hour);
+          }
         });
     }
+
+
+    function UpdateThisTweet(data){
+      var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
+      if(parseInt(result) < 0)
+        result = 0;
+      $('.results').show();
+      $("#thisTweet").html("Predicted ReTweets: " + result);
+    }
+
+    function UpdateResultLabels(label, id){
+      var resultText = $('#results').html()
+      var newResult = resultText + '<br><p>' + label + '<span id="label' + id + '"></span></span></p>';
+      $('#results').html(newResult);
+    }
+
+    function UpdateResults(data, label) {
+      var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
+      if(parseInt(result) < 0)
+        result = 0;
+      $('.results').show();
+      $("#label" + label).html(result);
+      $('#loader2').hide();
+    }
     $('#loader2').hide();
-  $('#results').hide();
+  $('.results').hide();
   $('#tweet-time').timepicker({ 'scrollDefault': 'now' });
   $(window).on('load', function(){
      $('.loader').fadeOut();
