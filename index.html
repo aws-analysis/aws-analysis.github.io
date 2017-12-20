@@ -46,14 +46,14 @@
       <div class="col-lg-2 side-left">
 
       </div>
-      <div class="col-lg-8 center">
+      <div class="col-lg-4">
         <form id="form" class="">
           Tweet Text:<br>
-          <input type="textarea" name="tweet-text"><br>
+          <textarea maxlength="240" form="form" required name="tweet-text"></textarea><br>
           Klout Score of Tweeter:<br>
-          <input type="text" name="klout"><br>
+          <input required type="text" name="klout"><br>
           Tweet Day:<br>
-          <input list="days" name="day"><br>
+          <input required list="days" name="day"><br>
             <datalist id="days">
               <option value="Monday">
               <option value="Tuesday">
@@ -64,13 +64,13 @@
               <option value="Sunday">
             </datalist>
           Tweet Time:<br>
-          <input id="tweet-time" name="time" class="time ui-timepicker-input" autocomplete="off" type="text"><br><br>
+          <input required id="tweet-time" name="time" class="time ui-timepicker-input" autocomplete="off" type="text"><br><br>
           Country:<br>
-          <input type="textarea" name="country"><br>
+          <input required type="textarea" name="country"><br>
           State:<br>
-          <input type="textarea" name="state"><br>
+          <input required type="textarea" name="state"><br>
           City:<br>
-          <input type="textarea" name="city"><br>
+          <input required type="textarea" name="city"><br>
           Gender:<br>
           <input type="radio" name="gender" value="Male"> Male<br>
           <input type="radio" name="gender" value="Female"> Female<br>
@@ -79,8 +79,20 @@
           <input type="submit" class="btn btn-primary" value="submit">
         </form>
       </div>
+      <div class="col-lg-4">
+        <span style="font-size:24px; font-weight:bolder;"id="results">Predicted Retweets: <span id="result-num"></span></span>
+        <div id="loader2"></div>
+        <div id="instructions">
+          <p class="lead">
+            Fill the form on the left and submit to see the expected number of ReTweets for your tweet and details provided. We will also provide some suggestions on other times that might be better for your tweet to be sent.
+          </p>
+          <p>
+          This tool is in an evaluation stage and in order to use the Machine Learning API, your browser must have security disabled. As the tool is further evaluated we will do what is necessary to have our API CORS friendly so that we can allow others to consume our API as well. To disable security features in Chrome please see <a href="https://stackoverflow.com/a/6083677">this answer on Stack Overflow</a>.
+          </p>
+        </div>
+      </div>
       <div class="col-lg-2 side-right">
-        <h2 id="results">Predicted Retweets: <span id="result-num"></span></h2>
+
       </div>
     </div>
   </div>
@@ -91,6 +103,9 @@
 <script>
   $('#form').on('submit', function(e) {
     e.preventDefault();
+    $('#instructions').hide();
+    $('#results').hide();
+    $('#loader2').show();
     var key = "nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==";
     var HourMs = "";
     var DayMs = "";
@@ -100,7 +115,7 @@
     var Country = "";
     var State = "";
     var City = "";
-    var Gender = "";
+    var Gender = "Unknown";
     var text = "";
     var URL = "false";
     var values = $(this).serializeArray();
@@ -113,7 +128,7 @@
           break;
         case "time":
           time = values[index].value;
-          hours = time.toString().trim(":")[0];
+          hours = time.toString().split(":")[0];
           pm = time.toString().includes("pm");
           if(pm)
             hours = parseInt(hours) + 12;
@@ -184,25 +199,39 @@
     }
 
     var body = JSON.stringify(data);
+    SendData(body);
 
-    $.ajax({
-          type: "POST",
-          url: "https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
-          data: body,
-          headers: {
-              "Authorization": "Bearer nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==",
-              "Content-Type": "application/json;charset=utf-8"
-          }
-      }).done(function (data) {
-          $('#results').show();
-          $('#result-num').html(data['Results']["output1"][0]['Scored Labels']);
-      });
     });
 
+    function SendData(body) {
+      $.ajax({
+            type: "POST",
+            url: "https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
+            data: body,
+            error: function(data, errorThrown)
+              {
+                  $('#loader2').hide();
+                  $('#instructions').html("An error occurred, check your tweet and try again.").show();
+              },
+            headers: {
+                "Authorization": "Bearer nvJ8v12HjRZpodiTbJk+lGuBJfALvLfbo0Tp/bpBRBR2Rodbd/5DBNOcqA6O/zjQIKpBN0SjJhSDRo/9TaPxFA==",
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        }).done(function (data) {
+            var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
+            if(parseInt(result) < 0)
+              result = 0;
+            $('#results').show();
+            $('#result-num').html(result);
+            $('#loader2').hide();
+        });
+    }
+    $('#loader2').hide();
   $('#results').hide();
   $('#tweet-time').timepicker({ 'scrollDefault': 'now' });
   $(window).on('load', function(){
      $('.loader').fadeOut();
    });
+
 </script>
 </html>
