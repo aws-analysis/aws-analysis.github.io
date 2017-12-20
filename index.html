@@ -263,6 +263,8 @@
       var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
       if(parseInt(result) < 0)
         result = 0;
+      if(result == "-0")
+        result = 0;
       $('.results').show();
       $("#thisTweet").html("Predicted ReTweets: " + result);
     }
@@ -276,6 +278,8 @@
     function UpdateResults(data, label) {
       var result = data['Results']["output1"][0]['Scored Labels'].toString().split(".")[0];
       if(parseInt(result) < 0)
+        result = 0;
+      if(result == "-0")
         result = 0;
       $('.results').show();
       $("#label" + label).html(result);
