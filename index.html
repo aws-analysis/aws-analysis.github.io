@@ -234,7 +234,7 @@
     function SendData(body, name) {
       $.ajax({
             type: "POST",
-            url: "https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
+            url: "https://cors-anywhere.herokuapp.com/https://ussouthcentral.services.azureml.net/workspaces/4d52a741d22d4e09b6564d071f335541/services/545434c7687944a29f3d165ddcd11e81/execute?api-version=2.0&format=swagger",
             data: body,
             error: function(data, errorThrown)
               {
