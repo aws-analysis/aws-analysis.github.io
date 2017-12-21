@@ -35,3 +35,9 @@
 .form-control {
 	margin: 0;
 }
+
+.btn-twitter {
+    color: #fff;
+    background-color: #1dcaff;
+    border-color: #0084b4;
+}
