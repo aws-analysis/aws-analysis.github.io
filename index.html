@@ -360,6 +360,9 @@
 
       </div>
     </div>
+    <div class="row">
+
+    </div>
   </div>
   <div class="loader"></div>
 </body>
@@ -487,7 +490,6 @@
         },
         "GlobalParameters": {}
       }
-
       var body = JSON.stringify(data);
       SendData(body);
     }
@@ -534,7 +536,7 @@
 
     function UpdateResultLabels(label, id){
       var resultText = $('#results').html()
-      var newResult = resultText + '<p>' + label + '<span id="label' + id + '"></span></span></p>';
+      var newResult = resultText + '<p>If sent at' + label + '<span id="label' + id + '">If Sent at </span></p>';
       $('#results').html(newResult);
     }
 
